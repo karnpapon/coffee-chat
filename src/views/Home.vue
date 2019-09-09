@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <h1 class="header-title"> COFFEE CHAT ☕ 💬 </h1>
+    <h1 class="header-title"> PEER 2 PEER CHAT ☕ 💬 </h1>
     <div v-on:click="getdata" class="home-detail"></div>
    
-     <div v-if="isBaffling" class="list-name">
+     <div class="list-name">
       <div
         v-for="(data, index) of getListData"
         :key="index"
@@ -12,17 +12,8 @@
       </div>
     </div>
 
-     <div v-else class="list-name">
-      <div
-        v-for="(datalist, indexlist) of initLists"
-        :key="indexlist"
-      >
-      <Displayer :listName="datalist"/>
-      </div>
-    </div>
-
      <div class="buttons">
-        <b-button type="is-primary" @click="start"  outlined>ready</b-button>
+        <!-- <b-button type="is-primary" @click="start"  outlined>ready</b-button> -->
         <b-button type="is-warning" @click="stop"  outlined>ta-daaa!</b-button>
         <b-button type="is-success" @click="saveData"  outlined>save</b-button>
       </div>
@@ -43,14 +34,18 @@ export default {
       baf: null,
       listData: "",
       isBaffling: false,
-      initLists: [["Satomi Osaki","Juri Fujii"],["Yuki","Bohyun Jung"],["Nariaki Iwatani","Masaya Ishikawa"],["Hind Al Saad","Kiwako"],["Takuma Oami","Takashi Mukoda"],["SUGIMOTO Tatsuo","karnpapon boonput"],["Fabian"]]
+      initLists: [["Satomi Osaki","Juri Fujii"],["Yuki","Bohyun Jung"],["Nariaki Iwatani","SUGIMOTO Tatsuo"],["Hind Al Saad","Kiwako"],["Takuma Oami","Takashi Mukoda"],["Masaya Ishikawa","karnpapon boonput"],["Fabian"]]
     }
   },
   created(){
-    this.$store.dispatch(FETCH_LISTDATA);
+    this.$store.dispatch(FETCH_LISTDATA).then(()=>  this.start() );
    
     },
   mounted() {
+    // if(this.getListData){
+      // this.start()
+    // }
+
   },
   components: {
     Displayer
@@ -76,7 +71,12 @@ export default {
       this.baf.reveal(1500);
     },
     saveData(){
-      this.$store.dispatch(SAVE_LISTDATA, this.listData);
+      if(!this.listData){
+        this.listData = this.getListData
+      }
+
+      console.log("this.listData", this.listData)
+      // this.$store.dispatch(SAVE_LISTDATA, this.listData);
     }
   }
 }
